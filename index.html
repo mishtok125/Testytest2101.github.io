@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Космический Путешественник</title>
+  <style>
+    /* Общие стили */
+    :root {
+      --primary: #6c5ce7;
+      --secondary: #a29bfe;
+      --text: #2d3436;
+      --bg: #f5f6fa;
+      --card-bg: #ffffff;
+    }
+    .dark-mode {
+      --primary: #a29bfe;
+      --secondary: #6c5ce7;
+      --text: #f5f6fa;
+      --bg: #1e272e;
+      --card-bg: #2d3436;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      transition: background 0.3s, color 0.3s;
+    }
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+    /* Шапка */
+    header {
+      padding: 2rem;
+      text-align: center;
+      position: relative;
+      z-index: 10;
+    }
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    p.subtitle {
+      font-size: 1.2rem;
+      opacity: 0.8;
+    }
+    /* Кнопка темы */
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      z-index: 100;
+    }
+    /* Параллакс-секция */
+    .parallax {
+      height: 500px;
+      background: url('https://images.unsplash.com/photo-1454789548928-9efd52dc4031?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80') no-repeat center;
+      background-size: cover;
+      background-attachment: fixed;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .parallax::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+    }
+    .parallax h2 {
+      color: white;
+      font-size: 3rem;
+      z-index: 2;
+      text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+    /* Карточки */
+    .cards {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 2rem;
+      gap: 2rem;
+    }
+    .card {
+      background: var(--card-bg);
+      border-radius: 15px;
+      padding: 2rem;
+      width: 300px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      transform: translateY(50px);
+      opacity: 0;
+      transition: transform 0.5s, opacity 0.5s;
+    }
+    .card.visible {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    .card h3 {
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+    .card p {
+      opacity: 0.8;
+    }
+    /* Футер */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      background: var(--primary);
+      color: white;
+    }
+    /* Анимации */
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+    .floating {
+      animation: float 4s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body>
+  <button class="theme-toggle" id="themeToggle">🌓</button>
+  
+  <header>
+    <h1 class="floating">Космический Путешественник</h1>
+    <p class="subtitle">Исследую Вселенную, одну галактику за раз</p>
+  </header>
+
+  <section class="parallax">
+    <h2>Бесконечность — не предел</h2>
+  </section>
+
+  <div class="cards">
+    <div class="card">
+      <h3>🌌 Галактики</h3>
+      <p>От спиральных до эллиптических — каждая галактика уникальна и прекрасна.</p>
+    </div>
+    <div class="card">
+      <h3>🪐 Планеты</h3>
+      <p>Газовые гиганты, ледяные миры и землеподобные планеты — что скрывают они?</p>
+    </div>
+    <div class="card">
+      <h3>🚀 Технологии</h3>
+      <p>Современные космические корабли и технологии будущего для межзвёздных путешествий.</p>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2023 Космический Путешественник | Сайт создан с ❤️ и JavaScript</p>
+  </footer>
+
+  <script>
+    // Переключение темы
+    const themeToggle = document.getElementById('themeToggle');
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      themeToggle.textContent = document.body.classList.contains('dark-mode') ? '🌞' : '🌓';
+    });
+
+    // Анимация появления карточек при скролле
+    const cards = document.querySelectorAll('.card');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    cards.forEach(card => observer.observe(card));
+
+    // Параллакс-эффект
+    document.addEventListener('scroll', () => {
+      const parallax = document.querySelector('.parallax');
+      const scrollPosition = window.pageYOffset;
+      parallax.style.backgroundPositionY = `${scrollPosition * 0.5}px`;
+    });
+  </script>
+</body>
+</html>
